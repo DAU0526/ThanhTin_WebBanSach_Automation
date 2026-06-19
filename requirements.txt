@@ -1,0 +1,25 @@
+# ============================================================
+# Tiny Bookstore — QA Automation Framework
+# Robot Framework + SeleniumLibrary stack
+# ============================================================
+
+# ── Core Framework ──────────────────────────────────────────
+robotframework==7.2.2
+
+# ── Browser Automation ──────────────────────────────────────
+robotframework-seleniumlibrary==6.7.1
+selenium==4.27.1
+
+# ── Utilities ───────────────────────────────────────────────
+# Đọc file YAML (environment.yaml, test data)
+PyYAML==6.0.2
+
+# Tạo fake data cho test (random username, email, ...)
+Faker==33.3.1
+
+# Hỗ trợ request kiểm tra API trong test teardown
+requests==2.32.3
+
+# ── Reporting (tuỳ chọn) ────────────────────────────────────
+# Sinh HTML report đẹp hơn mặc định của Robot
+robotframework-pabot==2.20.0        # Parallel execution

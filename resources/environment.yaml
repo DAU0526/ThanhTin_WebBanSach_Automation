@@ -1,0 +1,42 @@
+# ============================================================
+# Environment Configuration — Tiny Bookstore Automation
+# Chọn environment khi chạy bằng cách truyền variable:
+#   robot --variable ENV:staging ...
+# Mặc định sử dụng "production" (live Vercel site)
+# ============================================================
+
+production:
+  base_url: "https://tiny-bookstore.vercel.app"
+  browser: "chrome"
+  implicit_wait: 5           # giây
+  page_load_timeout: 30      # giây
+  headless: false
+
+staging:
+  base_url: "http://localhost:5173"
+  browser: "chrome"
+  implicit_wait: 3
+  page_load_timeout: 15
+  headless: false
+
+ci:
+  base_url: "http://localhost:5173"
+  browser: "chrome"
+  implicit_wait: 3
+  page_load_timeout: 15
+  headless: true             # Không cần màn hình trong CI/CD
+
+# ── Tài khoản dùng trong test ────────────────────────────────
+# KHÔNG đặt thông tin nhạy cảm thật ở đây.
+# Dùng cho test environment.
+
+credentials:
+  admin:
+    username: "admin"
+    password: "admin123"
+  # test_user được tạo động bằng Faker — xem test_data/users.yaml
+  test_user:
+    username: "qa_testuser"
+    password: "Test@12345"
+    full_name: "QA Test User"
+    email: "qa_testuser@test.local"

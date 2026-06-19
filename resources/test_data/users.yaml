@@ -1,0 +1,39 @@
+# ── Test Data: User Accounts ──────────────────────────────────
+# Dùng cho test setup và assertion
+# Tham chiếu từ common_keywords.resource và test suites
+
+# Tài khoản admin cố định (seeded trong DB khi server khởi động)
+admin:
+  username: "admin"
+  password: "admin123"
+  full_name: "Store Administrator"
+  email: "admin@tinybookstore.local"
+  role: "admin"
+
+# Tài khoản test user ổn định (phải được tạo trước khi chạy test hoặc tạo trong Suite Setup)
+test_user:
+  username: "qa_testuser"
+  password: "Test@12345"
+  full_name: "QA Test User"
+  email: "qa_testuser@test.local"
+  role: "customer"
+
+# Template để tạo user mới trong test (kết hợp với timestamp để unique)
+new_user_template:
+  full_name: "New QA User"
+  password: "NewUser@999"
+
+# Tài khoản dùng để test invalid credentials
+invalid_credentials:
+  wrong_password:
+    username: "admin"
+    password: "wrongpassword"
+  non_existent:
+    username: "user_does_not_exist"
+    password: "anypassword"
+  empty_username:
+    username: ""
+    password: "admin123"
+  empty_password:
+    username: "admin"
+    password: ""

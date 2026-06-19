@@ -1,0 +1,26 @@
+# ── Test Data: Books ──────────────────────────────────────────
+# Dùng để tham chiếu sách thực tế trong catalog khi viết test.
+# Cập nhật khi catalog thay đổi.
+
+# Sách dùng trong cart/checkout tests (phải có stock > 0)
+in_stock_book:
+  title: "Beastars"          # Tiêu đề thực tế trên site
+  # ID và price không hardcode — lấy dynamic từ API nếu cần
+
+# Sách dùng trong out-of-stock tests
+# Thêm vào khi có sách hết hàng để test
+
+# Dữ liệu để admin thêm sách mới (dùng trong Admin CRUD tests)
+new_book_template:
+  title: "QA Test Book"
+  author: "QA Automation"
+  price: "99000"
+  stock: "10"
+  description: "Book added by automated test — safe to delete"
+  cover: "https://via.placeholder.com/300x400?text=QA+Test"
+
+# Search queries dùng trong search tests
+search_queries:
+  valid_title: "Beast"          # Sẽ tìm thấy kết quả
+  valid_author: "Paru"          # Tìm theo tác giả
+  no_results: "xyznonexistent123"  # Không có kết quả
