@@ -1,34 +1,29 @@
 *** Settings ***
-Documentation    Locators cho Home page và Book Card component.
-...              Nguồn: Home.tsx, renderBookCard()
-...
-...              Lưu ý: Book card là dynamic (render từ danh sách sách).
-...              Sử dụng XPath tương đối để định vị theo tiêu đề sách.
-
+Documentation    Locators for the Home (Books Catalog) Page.
+...              Based on the actual React component Home.tsx.
 
 *** Variables ***
-${HOME_HERO_HEADING}            xpath=//h1[contains(.,'Build your reading stack')]
+# ── Hero ────────────────────────────────────────────────────────
+${HOME_HERO_HEADING}           xpath=//h1[contains(., 'Build your reading stack')]
 
-${HOME_TAB_RECENT}              xpath=//button[normalize-space()='Recent']
-${HOME_TAB_ALL_BOOKS}           xpath=//button[normalize-space()='All Books']
+# ── Search & Tabs ────────────────────────────────────────────────
+${INPUT_SEARCH_BOX}            xpath=//input[@placeholder='Search by title or author...']
+${TAB_RECENT}                  xpath=//button[normalize-space()='Recent']
+${TAB_ALL_BOOKS}               xpath=//button[normalize-space()='All Books']
 
-${HOME_SEARCH_INPUT}            xpath=//input[@placeholder='Search by title or author...']
+# ── Filters & Sort ──────────────────────────────────────────────
+${BTN_CATEGORY_FILTER}         xpath=//button[contains(@class, 'bg-sky-400') and .//*[local-name()='svg']]
+${BTN_FORMAT_FILTER}           xpath=//button[contains(normalize-space(), 'All Formats') or contains(@class, 'bg-white') and .//*[local-name()='svg']][1]
+${DROPDOWN_MENU_OPTIONS}       css=div.absolute.left-0.top-full button
 
-${HOME_FILTER_CATEGORIES}       xpath=//button[contains(.,'All Categories') or contains(.,'Categories')]
-${HOME_FILTER_FORMAT}           xpath=//button[contains(.,'All Formats') or contains(.,'Format')]
-${HOME_FILTER_PUBLISHER}        xpath=//button[contains(.,'All Publishers') or contains(.,'Publisher')]
-${HOME_FILTER_PRICE}            xpath=//button[contains(.,'All Prices') or contains(.,'Price')]
-${HOME_FILTER_SORT}             xpath=//button[contains(.,'Default Sorting') or contains(.,'Newest') or contains(.,'Oldest')]
+# ── Book Grid & Cards ───────────────────────────────────────────
+${BOOK_GRID}                   css=div.grid.grid-cols-1.gap-5
+${BOOK_CARD_ARTICLE}           css=article.group
+${BOOK_CARD_TITLE}             css=article.group h2.line-clamp-2
+${BTN_SEE_MORE}                xpath=//button[normalize-space()='See more']
 
-${HOME_BOOK_GRID}               xpath=//div[contains(@class,'grid')]
-${HOME_BOOK_CARDS}              xpath=//article[contains(@class,'rounded')]
-${HOME_NO_RESULTS_MSG}          xpath=//div[contains(.,'No books match your search') or contains(.,'No recent books found')]
-
-
-${HOME_BTN_ADD_TO_CART}         xpath=//button[normalize-space()='Add to cart' or normalize-space()='Unavailable']
-
-${HOME_BTN_SEE_MORE}            xpath=//button[normalize-space()='See more']
-
-${HOME_BADGE_OUT_OF_STOCK}      xpath=//span[normalize-space()='Out of stock']
-
-${HOME_BADGE_IN_CART}           xpath=//div[starts-with(normalize-space(),'In cart:')]
+# ── States ──────────────────────────────────────────────────────
+${STATE_EMPTY_RECENT}          xpath=//div[contains(@class, 'border-dashed') and contains(text(), 'No recent books found.')]
+${STATE_EMPTY_SEARCH}          xpath=//div[contains(@class, 'border-dashed') and contains(text(), 'No books match your search.')]
+${STATE_EMPTY_SEARCH_CAT}      xpath=//div[contains(@class, 'border-dashed') and contains(text(), 'No books found matching your search in this category.')]
+${STATE_LOADING_BOOKS}         xpath=//div[contains(text(), 'Discovering books for you...')]

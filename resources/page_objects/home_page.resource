@@ -1,100 +1,63 @@
 *** Settings ***
-Documentation    Page Object cho Home page (catalog, search, filters).
-...
-...              TRÁCH NHIỆM:
-...              - Điều hướng và tương tác với catalog sách
-...              - Search sách theo tên/tác giả
-...              - Dùng filters (category, format, price, sort)
-...              - Thêm sách vào cart từ card
-
+Documentation    Home Page Keywords.
+...              Provides interactions with the Book Catalog.
 Resource         ../locators/home_locators.resource
-Resource         ../locators/navbar_locators.resource
 Resource         ../variables/global_variables.resource
 Library          SeleniumLibrary
 
-
 *** Keywords ***
+Search For Book
+    [Arguments]    ${search_term}
+    [Documentation]    Enter text into the search box.
+    Wait Until Element Is Visible    ${INPUT_SEARCH_BOX}    timeout=${MEDIUM_TIMEOUT}
+    Clear Element Text               ${INPUT_SEARCH_BOX}
+    Input Text                       ${INPUT_SEARCH_BOX}    ${search_term}
+    Sleep                            1s
 
-Navigate To Home Page
-    Go To               ${URL_HOME}
-    Wait Until Element Is Visible    ${HOME_HERO_HEADING}    timeout=${LONG_TIMEOUT}
+Clear Search Box
+    [Documentation]    Clear the search box.
+    Wait Until Element Is Visible    ${INPUT_SEARCH_BOX}    timeout=${MEDIUM_TIMEOUT}
+    Press Keys                       ${INPUT_SEARCH_BOX}    CTRL+a+BACKSPACE
+    Sleep                            1s
 
 Switch To All Books Tab
-    Click Element       ${HOME_TAB_ALL_BOOKS}
-    Wait Until Element Is Visible    ${HOME_SEARCH_INPUT}    timeout=${SHORT_TIMEOUT}
+    [Documentation]    Click the "All Books" tab.
+    Wait Until Element Is Visible    ${TAB_ALL_BOOKS}       timeout=${MEDIUM_TIMEOUT}
+    Click Element                    ${TAB_ALL_BOOKS}
+    Sleep                            0.5s
 
 Switch To Recent Tab
-    Click Element       ${HOME_TAB_RECENT}
+    [Documentation]    Click the "Recent" tab.
+    Wait Until Element Is Visible    ${TAB_RECENT}          timeout=${MEDIUM_TIMEOUT}
+    Click Element                    ${TAB_RECENT}
+    Sleep                            0.5s
 
+Select Category
+    [Arguments]    ${category_name}
+    [Documentation]    Open the category dropdown and select a specific category.
+    Wait Until Element Is Visible    ${BTN_CATEGORY_FILTER}    timeout=${MEDIUM_TIMEOUT}
+    Click Element                    ${BTN_CATEGORY_FILTER}
+    Sleep                            0.5s
+    ${category_option}    Set Variable    xpath=//div[contains(@class, 'absolute left-0 top-full')]//button[normalize-space()='${category_name}']
+    Wait Until Element Is Visible    ${category_option}        timeout=${MEDIUM_TIMEOUT}
+    Click Element                    ${category_option}
+    Sleep                            1s
 
-Search For Book
-    [Documentation]    Nhập từ khoá vào ô tìm kiếm. Kết quả filter client-side.
-    [Arguments]         ${query}
-    Wait Until Element Is Visible    ${HOME_SEARCH_INPUT}    timeout=${MEDIUM_TIMEOUT}
-    Clear Element Text               ${HOME_SEARCH_INPUT}
-    Input Text                       ${HOME_SEARCH_INPUT}    ${query}
-    Wait Until Element Is Visible    ${HOME_BOOK_GRID}    timeout=${MEDIUM_TIMEOUT}
+Verify Book Present In Grid
+    [Arguments]    ${book_title}
+    [Documentation]    Verify that a book card with the exact title is displayed.
+    Wait Until Element Is Visible    xpath=//article[contains(@class, 'group')]//h2[normalize-space()='${book_title}']    timeout=${MEDIUM_TIMEOUT}
 
-Clear Search
-    Clear Element Text    ${HOME_SEARCH_INPUT}
-    Press Keys            ${HOME_SEARCH_INPUT}    CTRL+a    DELETE
+Verify Empty Search State
+    [Documentation]    Verify that the "No books match your search." message is displayed.
+    Wait Until Element Is Visible    ${STATE_EMPTY_SEARCH}    timeout=${MEDIUM_TIMEOUT}
 
+Verify Loading State
+    [Documentation]    Verify the "Discovering books for you..." loader is shown.
+    Wait Until Element Is Visible    ${STATE_LOADING_BOOKS}   timeout=${SHORT_TIMEOUT}
 
-Get Book Card By Title
-    [Documentation]    Trả về XPath của book card theo tiêu đề sách.
-    [Arguments]         ${title}
-    RETURN              xpath=//article[.//h2[contains(normalize-space(),'${title}')]]
-
-Click Add To Cart For Book
-    [Documentation]    Tìm card sách theo tiêu đề và click "Add to cart".
-    [Arguments]         ${title}
-    ${card_xpath}=      Get Book Card By Title    ${title}
-    ${btn_xpath}=       Set Variable    ${card_xpath}//button[contains(normalize-space(),'Add to cart')]
-    Wait Until Element Is Visible    ${btn_xpath}    timeout=${MEDIUM_TIMEOUT}
-    Click Element       ${btn_xpath}
-
-Click Book Card To Open Detail
-    [Documentation]    Click vào title/cover của book card để vào Book Detail page.
-    [Arguments]         ${title}
-    ${card_xpath}=      Get Book Card By Title    ${title}
-    ${link_xpath}=      Set Variable    ${card_xpath}//a
-    Wait Until Element Is Visible    ${link_xpath}    timeout=${MEDIUM_TIMEOUT}
-    Click Element       ${link_xpath}
-
-
-Select Category Filter
-    [Documentation]    Mở dropdown Category và chọn theo tên.
-    [Arguments]         ${category_name}
-    Click Element       ${HOME_FILTER_CATEGORIES}
-    ${option}=          Set Variable    xpath=//button[normalize-space()='${category_name}']
-    Wait Until Element Is Visible    ${option}    timeout=${SHORT_TIMEOUT}
-    Click Element       ${option}
-
-Select Price Range Filter
-    [Documentation]    Mở dropdown Price và chọn theo label.
-    [Arguments]         ${price_label}
-    Click Element       ${HOME_FILTER_PRICE}
-    ${option}=          Set Variable    xpath=//button[normalize-space()='${price_label}']
-    Wait Until Element Is Visible    ${option}    timeout=${SHORT_TIMEOUT}
-    Click Element       ${option}
-
-
-Book Card Should Be Visible
-    [Arguments]         ${title}
-    ${card_xpath}=      Get Book Card By Title    ${title}
-    Wait Until Element Is Visible    ${card_xpath}    timeout=${MEDIUM_TIMEOUT}
-
-No Results Message Should Be Visible
-    Wait Until Element Is Visible    ${HOME_NO_RESULTS_MSG}    timeout=${MEDIUM_TIMEOUT}
-
-Book Cards Should Be Displayed
-    [Documentation]    Xác nhận có ít nhất một book card trên trang.
-    Wait Until Page Contains Element    ${HOME_BOOK_CARDS}    timeout=${LONG_TIMEOUT}
-
-In Cart Badge Should Show For Book
-    [Documentation]    Xác nhận badge "In cart: N" xuất hiện trên card sách.
-    [Arguments]         ${title}    ${expected_qty}
-    ${card_xpath}=      Get Book Card By Title    ${title}
-    ${badge_xpath}=     Set Variable    ${card_xpath}//div[contains(.,'In cart:')]
-    Wait Until Element Is Visible    ${badge_xpath}          timeout=${SHORT_TIMEOUT}
-    Element Should Contain           ${badge_xpath}    ${expected_qty}
+Click Book Card
+    [Arguments]    ${book_title}
+    [Documentation]    Click the book card link to navigate to Book Details.
+    Wait Until Element Is Visible    xpath=//article[contains(@class, 'group')]//h2[normalize-space()='${book_title}']    timeout=${MEDIUM_TIMEOUT}
+    Click Element                    xpath=//article[contains(@class, 'group')]//h2[normalize-space()='${book_title}']
