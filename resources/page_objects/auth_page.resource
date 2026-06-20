@@ -1,10 +1,10 @@
 *** Settings ***
-Documentation    Page Object cho Auth pages (Login & Register).
+Documentation    Page Object for Auth pages (Login & Register).
 ...
-...              THIẾT KẾ:
-...              - Mỗi keyword là một hành động nguyên tử hoặc assertion rõ ràng.
-...              - Test case KHÔNG bao giờ gọi SeleniumLibrary trực tiếp.
-...              - Toàn bộ XPath/CSS tập trung tại auth_locators.resource.
+...              DESIGN:
+...              - Each keyword is an atomic action or a clear assertion.
+...              - Test cases NEVER call SeleniumLibrary directly.
+...              - All XPath/CSS selectors are centralized in auth_locators.resource.
 
 Resource         ../locators/auth_locators.resource
 Resource         ../locators/navbar_locators.resource
@@ -15,40 +15,40 @@ Library          SeleniumLibrary
 *** Keywords ***
 
 Navigate To Login Page
-    [Documentation]    Đi đến /login và đợi form xuất hiện.
+    [Documentation]    Navigate to /login and wait for the form to appear.
     Wait Until Element Is Visible    ${NAV_LINK_LOGIN}    timeout=${MEDIUM_TIMEOUT}
     Click Element       ${NAV_LINK_LOGIN}
     Wait Until Element Is Visible    ${HEADING_LOGIN}    timeout=${MEDIUM_TIMEOUT}
 
 Navigate To Register Page
-    [Documentation]    Đi đến /register và đợi form xuất hiện.
+    [Documentation]    Navigate to /register and wait for the form to appear.
     Go To               ${URL_REGISTER}
     Wait Until Element Is Visible    ${HEADING_REGISTER}    timeout=${MEDIUM_TIMEOUT}
 
 Switch To Register Page Via Link
-    [Documentation]    Click "Register here" từ trang Login.
+    [Documentation]    Click 'Register here' from the Login page.
     Click Element       ${LINK_SWITCH_TO_REGISTER}
     Wait Until Element Is Visible    ${HEADING_REGISTER}    timeout=${MEDIUM_TIMEOUT}
 
 Switch To Login Page Via Link
-    [Documentation]    Click "Log in here" từ trang Register.
+    [Documentation]    Click 'Log in here' from the Register page.
     Click Element       ${LINK_SWITCH_TO_LOGIN}
     Wait Until Element Is Visible    ${HEADING_LOGIN}    timeout=${MEDIUM_TIMEOUT}
 
 
 Fill Login Form
-    [Documentation]    Điền username + password vào form login.
+    [Documentation]    Fill username and password into the login form.
     [Arguments]         ${username}    ${password}
     Input Text          ${INPUT_USERNAME}    ${username}
     Input Text          ${INPUT_PASSWORD}    ${password}
 
 Fill Login Username Only
-    [Documentation]    Điền username, để trống password.
+    [Documentation]    Fill username, leave password empty.
     [Arguments]         ${username}
     Input Text          ${INPUT_USERNAME}    ${username}
 
 Fill Register Form
-    [Documentation]    Điền đầy đủ 4 trường form register.
+    [Documentation]    Fill all 4 fields in the register form.
     [Arguments]         ${full_name}    ${username}    ${email}    ${password}
     Input Text          ${INPUT_FULL_NAME}    ${full_name}
     Input Text          ${INPUT_USERNAME}     ${username}
@@ -56,7 +56,7 @@ Fill Register Form
     Input Text          ${INPUT_PASSWORD}     ${password}
 
 Fill Register Form Without Email
-    [Documentation]    Điền form register, bỏ qua email (optional field).
+    [Documentation]    Fill register form, skip email (optional field).
     [Arguments]         ${full_name}    ${username}    ${password}
     Input Text          ${INPUT_FULL_NAME}    ${full_name}
     Input Text          ${INPUT_USERNAME}     ${username}
@@ -64,22 +64,22 @@ Fill Register Form Without Email
 
 
 Submit Auth Form
-    [Documentation]    Click nút submit (dùng chung cho cả Login & Register).
+    [Documentation]    Click the submit button (shared for Login & Register).
     Click Button        ${BTN_SUBMIT}
 
 Toggle Password Visibility
-    [Documentation]    Click icon mắt để show/hide password.
+    [Documentation]    Click the eye icon to show/hide password.
     Click Element       ${BTN_TOGGLE_PASSWORD}
 
 
 Login With Credentials
-    [Documentation]    Điền form và submit — shorthand cho login.
+    [Documentation]    Fill form and submit — shorthand for login.
     [Arguments]         ${username}    ${password}
     Fill Login Form     ${username}    ${password}
     Submit Auth Form
 
 Register With Full Data
-    [Documentation]    Điền form đầy đủ và submit — shorthand cho register.
+    [Documentation]    Fill form completely and submit — shorthand for register.
     [Arguments]         ${full_name}    ${username}    ${email}    ${password}
     Fill Register Form  ${full_name}    ${username}    ${email}    ${password}
     Submit Auth Form
@@ -88,42 +88,42 @@ Register With Full Data
 
 
 Login Page Should Be Open
-    [Documentation]    Xác nhận đang ở /login với form đúng.
+    [Documentation]    Verify we are on /login with the correct form.
     Location Should Be                   ${URL_LOGIN}
     Element Should Be Visible            ${HEADING_LOGIN}
 
 Register Page Should Be Open
-    [Documentation]    Xác nhận đang ở /register với form đúng.
+    [Documentation]    Verify we are on /register with the correct form.
     Location Should Be                   ${URL_REGISTER}
     Element Should Be Visible            ${HEADING_REGISTER}
 
 Should Be On Home Page
-    [Documentation]    Xác nhận đang ở trang chủ (sau khi auth thành công).
+    [Documentation]    Verify we are on the home page (after successful auth).
     Wait Until Location Is    ${URL_HOME}    timeout=${MEDIUM_TIMEOUT}
 
 
 Error Message Should Be Visible
-    [Documentation]    Có thông báo lỗi từ server trên trang.
+    [Documentation]    Server error message is visible on the page.
     Wait Until Element Is Visible    ${ERROR_MESSAGE}    timeout=${SHORT_TIMEOUT}
 
 Error Message Should Contain
-    [Documentation]    Nội dung thông báo lỗi phải chứa text mong đợi.
+    [Documentation]    Error message must contain the expected text.
     [Arguments]         ${expected_text}
     Error Message Should Be Visible
     Element Should Contain    ${ERROR_MESSAGE}    ${expected_text}
 
 Error Message Should Not Be Visible
-    [Documentation]    Không có thông báo lỗi nào xuất hiện.
+    [Documentation]    No error message should be visible.
     Element Should Not Be Visible    ${ERROR_MESSAGE}
 
 
 Password Field Type Should Be Password
-    [Documentation]    Xác nhận ô password đang ở chế độ ẩn.
+    [Documentation]    Verify the password field is hidden.
     ${type}=    Get Element Attribute    ${INPUT_PASSWORD}    type
     Should Be Equal    ${type}    password
 
 Password Field Type Should Be Text
-    [Documentation]    Xác nhận ô password đang ở chế độ hiện (sau khi toggle).
+    [Documentation]    Verify the password field is visible (after toggle).
     ${type}=    Get Element Attribute    ${INPUT_PASSWORD}    type
     Should Be Equal    ${type}    text
 
