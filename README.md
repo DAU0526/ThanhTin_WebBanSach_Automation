@@ -1,5 +1,7 @@
 # Tiny Bookstore — QA Automation Framework
 
+**Tác giả:** Nguyễn Thành Tín
+
 Framework kiểm thử tự động cho dự án **Tiny Bookstore** ([tiny-bookstore.vercel.app](https://tiny-bookstore.vercel.app)), xây dựng trên **Robot Framework + SeleniumLibrary** theo pattern **Page Object Model (POM)**.
 
 ---
@@ -65,19 +67,23 @@ tiny-bookstore-automation/
 │
 ├── resources/
 │   ├── locators/               # XPath/CSS selectors theo từng trang
-│   │   ├── auth_locators.resource
-│   │   ├── navbar_locators.resource
-│   │   ├── home_locators.resource
-│   │   ├── cart_locators.resource
 │   │   ├── admin_locators.resource
-│   │   └── book_detail_locators.resource
+│   │   ├── auth_locators.resource
+│   │   ├── book_detail_locators.resource
+│   │   ├── cart_locators.resource
+│   │   ├── home_locators.resource
+│   │   ├── navbar_locators.resource
+│   │   └── orders_locators.resource
 │   │
 │   ├── page_objects/           # POM — keywords theo từng trang
+│   │   ├── admin_page.resource
 │   │   ├── auth_page.resource
-│   │   ├── navbar_page.resource
-│   │   ├── home_page.resource
+│   │   ├── book_detail_page.resource
 │   │   ├── cart_page.resource
-│   │   └── admin_page.resource
+│   │   ├── checkout_page.resource
+│   │   ├── home_page.resource
+│   │   ├── navbar_page.resource
+│   │   └── orders_page.resource
 │   │
 │   ├── test_data/              # Dữ liệu test (YAML)
 │   │   ├── users.yaml
@@ -91,10 +97,13 @@ tiny-bookstore-automation/
 │   └── environment.yaml            # Config theo môi trường (prod/staging/ci)
 │
 ├── tests/
+│   ├── admin/                  # Test Admin Dashboard + Books CRUD
 │   ├── auth/                   # Test Login, Register, Logout
+│   ├── book_detail/            # Test Book Detail Page
 │   ├── cart/                   # Test Cart management
 │   ├── checkout/               # Test Checkout flow (end-to-end)
-│   └── admin/                  # Test Admin Dashboard + Access Control
+│   ├── home/                   # Test Home Catalog, Search, Filter
+│   └── orders/                 # Test Purchase History & Orders
 │
 ├── results/                    # Output: log.html, report.html, screenshots
 │
