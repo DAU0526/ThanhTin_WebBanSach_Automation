@@ -14,34 +14,23 @@ Documentation    Locators cho Auth pages — nguồn từ Auth.tsx (audit trực
 
 
 *** Variables ***
-# ── Form Inputs (id trực tiếp từ JSX) ────────────────────────
 ${INPUT_FULL_NAME}              id=fullName
 ${INPUT_USERNAME}               id=username
 ${INPUT_EMAIL}                  id=email
 ${INPUT_PASSWORD}               id=password
 
-# ── Submit Button ─────────────────────────────────────────────
-# Duy nhất một button[type=submit] trong form auth
-${BTN_SUBMIT}                   css=button[type="submit"]
+${BTN_SUBMIT}                   xpath=//form//button[@type='submit']
 
-# ── Password Toggle ───────────────────────────────────────────
-# aria-label thay đổi động: "Show password" ↔ "Hide password"
-${BTN_TOGGLE_PASSWORD}          css=button[type="button"]
+${BTN_TOGGLE_PASSWORD}          xpath=//form//button[@type='button']
 
-# ── Navigation Links (guest state) ───────────────────────────
 ${LINK_TO_LOGIN}                css=a[href="/login"]
 ${LINK_TO_REGISTER}             css=a[href="/register"]
 
-# ── Navigation Links (auth page switch) ──────────────────────
-# "Log in here" / "Register here" links trong form
 ${LINK_SWITCH_TO_LOGIN}         xpath=//a[text()='Log in here']
 ${LINK_SWITCH_TO_REGISTER}      xpath=//a[text()='Register here']
 
-# ── Error Message ─────────────────────────────────────────────
-# Div hiển thị lỗi từ server: class="...border-red-200 bg-red-50...text-red-600"
-${ERROR_MESSAGE}                css=.border-red-200.bg-red-50
+${ERROR_MESSAGE}                css=.bg-red-50.border-red-200
 
-# ── Page Headings ─────────────────────────────────────────────
 ${HEADING_LOGIN}                xpath=//h1[.='Welcome back']
 ${HEADING_REGISTER}             xpath=//h1[.='Create your reader account']
 

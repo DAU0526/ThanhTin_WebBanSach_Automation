@@ -7,18 +7,17 @@ Documentation    Page Object cho Auth pages (Login & Register).
 ...              - Toàn bộ XPath/CSS tập trung tại auth_locators.resource.
 
 Resource         ../locators/auth_locators.resource
+Resource         ../locators/navbar_locators.resource
 Resource         ../variables/global_variables.resource
 Library          SeleniumLibrary
 
 
 *** Keywords ***
-# ══════════════════════════════════════════════════════════════
-# NAVIGATION
-# ══════════════════════════════════════════════════════════════
 
 Navigate To Login Page
     [Documentation]    Đi đến /login và đợi form xuất hiện.
-    Go To               ${URL_LOGIN}
+    Wait Until Element Is Visible    ${NAV_LINK_LOGIN}    timeout=${MEDIUM_TIMEOUT}
+    Click Element       ${NAV_LINK_LOGIN}
     Wait Until Element Is Visible    ${HEADING_LOGIN}    timeout=${MEDIUM_TIMEOUT}
 
 Navigate To Register Page
@@ -36,9 +35,6 @@ Switch To Login Page Via Link
     Click Element       ${LINK_SWITCH_TO_LOGIN}
     Wait Until Element Is Visible    ${HEADING_LOGIN}    timeout=${MEDIUM_TIMEOUT}
 
-# ══════════════════════════════════════════════════════════════
-# FORM ACTIONS — FILL
-# ══════════════════════════════════════════════════════════════
 
 Fill Login Form
     [Documentation]    Điền username + password vào form login.
@@ -66,9 +62,6 @@ Fill Register Form Without Email
     Input Text          ${INPUT_USERNAME}     ${username}
     Input Text          ${INPUT_PASSWORD}     ${password}
 
-# ══════════════════════════════════════════════════════════════
-# FORM ACTIONS — SUBMIT
-# ══════════════════════════════════════════════════════════════
 
 Submit Auth Form
     [Documentation]    Click nút submit (dùng chung cho cả Login & Register).
@@ -78,9 +71,6 @@ Toggle Password Visibility
     [Documentation]    Click icon mắt để show/hide password.
     Click Element       ${BTN_TOGGLE_PASSWORD}
 
-# ══════════════════════════════════════════════════════════════
-# COMPOSED ACTIONS (thường dùng trong test)
-# ══════════════════════════════════════════════════════════════
 
 Login With Credentials
     [Documentation]    Điền form và submit — shorthand cho login.
@@ -96,9 +86,6 @@ Register With Full Data
 
 
 
-# ══════════════════════════════════════════════════════════════
-# ASSERTIONS — PAGE STATE
-# ══════════════════════════════════════════════════════════════
 
 Login Page Should Be Open
     [Documentation]    Xác nhận đang ở /login với form đúng.
@@ -114,9 +101,6 @@ Should Be On Home Page
     [Documentation]    Xác nhận đang ở trang chủ (sau khi auth thành công).
     Wait Until Location Is    ${URL_HOME}    timeout=${MEDIUM_TIMEOUT}
 
-# ══════════════════════════════════════════════════════════════
-# ASSERTIONS — ERROR MESSAGE
-# ══════════════════════════════════════════════════════════════
 
 Error Message Should Be Visible
     [Documentation]    Có thông báo lỗi từ server trên trang.
@@ -132,9 +116,6 @@ Error Message Should Not Be Visible
     [Documentation]    Không có thông báo lỗi nào xuất hiện.
     Element Should Not Be Visible    ${ERROR_MESSAGE}
 
-# ══════════════════════════════════════════════════════════════
-# ASSERTIONS — FORM INPUT STATE
-# ══════════════════════════════════════════════════════════════
 
 Password Field Type Should Be Password
     [Documentation]    Xác nhận ô password đang ở chế độ ẩn.

@@ -13,9 +13,6 @@ Library          SeleniumLibrary
 
 *** Keywords ***
 
-# ──────────────────────────────────────────────────────────────
-# SETUP / TEARDOWN
-# ──────────────────────────────────────────────────────────────
 
 Open Browser With Config
     [Documentation]    Mở browser theo cấu hình trong global_variables.
@@ -46,7 +43,6 @@ Get Chrome Options
     Call Method    ${options}    add_argument    --disable-dev-shm-usage
     Call Method    ${options}    add_argument    --disable-gpu
 
-    # Tắt popup lưu password
     ${prefs}=    Create Dictionary
     ...    credentials_enable_service=${False}
     ...    profile.password_manager_enabled=${False}
@@ -81,9 +77,6 @@ Take Screenshot On Failure
     Capture Page Screenshot    ${SCREENSHOT_DIR}${/}${filename}
 
 
-# ──────────────────────────────────────────────────────────────
-# SESSION MANAGEMENT
-# ──────────────────────────────────────────────────────────────
 
 Clear Browser Session Data
     [Documentation]    Xóa localStorage và cookies.
@@ -111,9 +104,6 @@ Get Local Storage Item
     RETURN    ${value}
 
 
-# ──────────────────────────────────────────────────────────────
-# WAIT HELPERS
-# ──────────────────────────────────────────────────────────────
 
 Wait For Page To Load Completely
     Wait Until Page Contains Element    //body    timeout=${PAGE_LOAD_TIMEOUT}
@@ -131,9 +121,6 @@ Scroll To Element
     Scroll Element Into View    ${locator}
 
 
-# ──────────────────────────────────────────────────────────────
-# URL HELPERS
-# ──────────────────────────────────────────────────────────────
 
 Current URL Should Contain
     [Arguments]    ${expected_fragment}

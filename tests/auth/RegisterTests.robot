@@ -45,9 +45,6 @@ TC-REG-01 Register With Valid Data Should Succeed
     Error Message Should Not Be Visible
 
 
-# ══════════════════════════════════════════════════════════════
-# TC-REG-02: DUPLICATE USERNAME
-# ══════════════════════════════════════════════════════════════
 TC-REG-02 Register With Existing Username Should Fail
     [Documentation]    Đăng ký với username "admin" đã tồn tại trong DB.
     ...                Kết quả: server trả lỗi "Username already exists".
@@ -63,21 +60,16 @@ TC-REG-02 Register With Existing Username Should Fail
 
     Submit Auth Form
 
-    # Phải ở lại trang register, không redirect
     Register Page Should Be Open
     Error Message Should Contain    Username already exists
 
 
-# ══════════════════════════════════════════════════════════════
-# TC-REG-03: DUPLICATE EMAIL
-# ══════════════════════════════════════════════════════════════
 TC-REG-03 Register With Existing Email Should Fail
     [Documentation]    Đăng ký với email "admin@tinybookstore.local" đã tồn tại.
     ...                Email này được seed cùng tài khoản admin khi DB khởi tạo.
     ...                Kết quả: server trả lỗi "Email already exists".
     [Tags]    auth    register    negative    TC-REG-03
 
-    # Tạo username unique để chắc chắn lỗi đến từ email, không phải username
     ${username}=    Generate Unique Username
 
     Navigate To Register Page
@@ -90,14 +82,10 @@ TC-REG-03 Register With Existing Email Should Fail
 
     Submit Auth Form
 
-    # Phải ở lại trang register
     Register Page Should Be Open
     Error Message Should Contain    Email already exists
 
 
-# ══════════════════════════════════════════════════════════════
-# TC-REG-04: INVALID EMAIL FORMAT
-# ══════════════════════════════════════════════════════════════
 TC-REG-04 Register With Invalid Email Format Should Be Blocked
     [Documentation]    Điền email không đúng format (thiếu "@").
     ...                Browser chặn submit vì input type="email" — HTML5 validation.
@@ -106,24 +94,18 @@ TC-REG-04 Register With Invalid Email Format Should Be Blocked
 
     Navigate To Register Page
 
-    # Điền form với email không hợp lệ
     Fill Register Form
     ...    full_name=Invalid Email User
     ...    username=qa_invalidemail
     ...    email=notvalidemail
     ...    password=Test@12345
 
-    # Click submit — browser sẽ chặn do type="email" validation
     Submit Auth Form
 
-    # Vẫn ở trang register, không có server error (form không submit)
     Register Page Should Be Open
     Error Message Should Not Be Visible
 
 
-# ══════════════════════════════════════════════════════════════
-# TC-REG-05: EMPTY REQUIRED FIELDS
-# ══════════════════════════════════════════════════════════════
 TC-REG-05 Register With Empty Required Fields Should Be Blocked
     [Documentation]    Submit form register hoàn toàn trống.
     ...                username và password có thuộc tính "required".
@@ -133,9 +115,27 @@ TC-REG-05 Register With Empty Required Fields Should Be Blocked
 
     Navigate To Register Page
 
-    # Không điền gì, click thẳng submit
     Submit Auth Form
 
-    # Form bị giữ lại do required validation
     Register Page Should Be Open
+    Error Message Should Not Be Visible
+
+
+TC-REG-06 Register Without Email Should Succeed
+    [Documentation]    Đăng ký thành công khi bỏ trống email (optional field).
+    [Tags]    auth    register    TC-REG-06
+
+    ${username}=    Generate Unique Username
+
+    Navigate To Register Page
+
+    Fill Register Form Without Email
+    ...    full_name=No Email User
+    ...    username=${username}
+    ...    password=Test@12345
+
+    Submit Auth Form
+
+    Should Be On Home Page
+    Navbar Should Show Authenticated State
     Error Message Should Not Be Visible

@@ -7,18 +7,15 @@ Documentation    Locators cho Admin Dashboard (/admin).
 
 
 *** Variables ***
-# ── Stats Cards ──────────────────────────────────────────────
 ${ADMIN_STAT_BOOKS}             xpath=//*[contains(.,'Books in catalog')]/following-sibling::* | //*[contains(.,'Books in catalog')]/../*[contains(@class,'text-') and contains(@class,'font-')]
 ${ADMIN_STAT_USERS}             xpath=//*[contains(.,'Registered users')]
 ${ADMIN_STAT_REVENUE}           xpath=//*[contains(.,'Total revenue')]
 
-# ── Tabs ─────────────────────────────────────────────────────
 ${ADMIN_TAB_MANAGEMENT}         xpath=//button[normalize-space()='Management']
 ${ADMIN_TAB_INVENTORY}          xpath=//button[normalize-space()='Inventory']
 ${ADMIN_TAB_ORDERS}             xpath=//button[normalize-space()='Orders']
 ${ADMIN_TAB_USERS}              xpath=//button[normalize-space()='Users']
 
-# ── Add Book Form ────────────────────────────────────────────
 ${ADMIN_INPUT_BOOK_TITLE}       xpath=//input[@placeholder='Title' or @name='title']
 ${ADMIN_INPUT_BOOK_AUTHOR}      xpath=//input[@placeholder='Author' or @name='author']
 ${ADMIN_INPUT_BOOK_PRICE}       xpath=//input[@placeholder='Price' or @name='price' or @type='number'][1]
@@ -28,25 +25,19 @@ ${ADMIN_INPUT_BOOK_DESCRIPTION}    xpath=//textarea[@placeholder='Description' o
 ${ADMIN_SELECT_CATEGORY}        xpath=//select[@name='categoryId' or contains(@class,'category')]
 ${ADMIN_BTN_ADD_BOOK}           xpath=//button[normalize-space()='Add Book' or normalize-space()='Add book']
 
-# ── Add Category Form ────────────────────────────────────────
 ${ADMIN_INPUT_CATEGORY_NAME}    xpath=//input[@placeholder='Category name' or @name='categoryName']
 ${ADMIN_BTN_ADD_CATEGORY}       xpath=//button[normalize-space()='Add Category' or normalize-space()='Add category']
 
-# ── Inventory Table ──────────────────────────────────────────
 ${ADMIN_INVENTORY_ROWS}         xpath=//table//tbody//tr | //div[contains(@class,'inventory')]//article
 ${ADMIN_BTN_EDIT_BOOK}          xpath=//button[normalize-space()='Edit']
 ${ADMIN_BTN_DELETE_BOOK}        xpath=//button[normalize-space()='Delete']
 ${ADMIN_BTN_CONFIRM_DELETE}     xpath=//button[normalize-space()='Confirm' or normalize-space()='Yes, delete']
 
-# ── Orders Table ─────────────────────────────────────────────
 ${ADMIN_ORDERS_LIST}            xpath=//table//tbody//tr | //div[contains(@class,'order')]
 ${ADMIN_ORDER_DETAIL}           xpath=//div[contains(@class,'order-detail') or contains(@class,'order')]
 
-# ── Users Table ──────────────────────────────────────────────
 ${ADMIN_USERS_LIST}             xpath=//table//tbody//tr | //div[contains(@class,'user-row')]
 ${ADMIN_BTN_CHANGE_ROLE}        xpath=//button[contains(.,'Make Admin') or contains(.,'Make Customer')]
 ${ADMIN_BTN_DELETE_USER}        xpath=//button[normalize-space()='Delete' and ancestor::*[contains(@class,'user')]]
 
-# ── Access denied (redirect kiểm tra) ───────────────────────
-# Khi non-admin vào /admin sẽ bị redirect về / — không có element này
 ${ADMIN_DASHBOARD_CONTAINER}    xpath=//*[contains(@class,'admin') or contains(.,'Admin Dashboard')]

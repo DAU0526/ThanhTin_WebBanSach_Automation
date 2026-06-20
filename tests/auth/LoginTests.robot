@@ -29,9 +29,6 @@ Test Teardown    Run Keyword If Test Failed    Take Screenshot On Failure
 
 *** Test Cases ***
 
-# ══════════════════════════════════════════════════════════════
-# TC-LGN-01: LOGIN SUCCESS
-# ══════════════════════════════════════════════════════════════
 TC-LGN-01 Login With Valid Admin Credentials Should Succeed
     [Documentation]    Login với admin/admin123 (tài khoản seeded mặc định).
     ...                Kết quả:
@@ -53,9 +50,6 @@ TC-LGN-01 Login With Valid Admin Credentials Should Succeed
     Error Message Should Not Be Visible
 
 
-# ══════════════════════════════════════════════════════════════
-# TC-LGN-02: WRONG PASSWORD
-# ══════════════════════════════════════════════════════════════
 TC-LGN-02 Login With Wrong Password Should Fail
     [Documentation]    Login với username đúng nhưng password sai.
     ...                Kết quả:
@@ -70,19 +64,14 @@ TC-LGN-02 Login With Wrong Password Should Fail
     ...    username=${ADMIN_USERNAME}
     ...    password=wrong_password_xyz
 
-    # Phải ở lại trang login
     Login Page Should Be Open
     Error Message Should Contain    Invalid credentials
     Navbar Should Show Guest State
 
-    # Token KHÔNG được lưu vào localStorage
     ${token}=    Get Local Storage Item    token
     Should Be Equal    ${token}    ${None}
 
 
-# ══════════════════════════════════════════════════════════════
-# TC-LGN-03: WRONG USERNAME
-# ══════════════════════════════════════════════════════════════
 TC-LGN-03 Login With Non-Existent Username Should Fail
     [Documentation]    Login với username không tồn tại trong hệ thống.
     ...                Kết quả:
@@ -102,9 +91,6 @@ TC-LGN-03 Login With Non-Existent Username Should Fail
     Navbar Should Show Guest State
 
 
-# ══════════════════════════════════════════════════════════════
-# TC-LGN-04: EMPTY FIELDS
-# ══════════════════════════════════════════════════════════════
 TC-LGN-04 Login With Empty Username And Password Should Be Blocked
     [Documentation]    Submit form login hoàn toàn trống.
     ...                username và password đều có thuộc tính "required".
@@ -114,10 +100,8 @@ TC-LGN-04 Login With Empty Username And Password Should Be Blocked
 
     Navigate To Login Page
 
-    # Không điền gì, click thẳng submit
     Submit Auth Form
 
-    # Vẫn ở /login, browser validation giữ lại
     Login Page Should Be Open
     Error Message Should Not Be Visible
     Navbar Should Show Guest State
@@ -131,16 +115,12 @@ TC-LGN-04B Login With Empty Password Only Should Be Blocked
     Navigate To Login Page
 
     Fill Login Username Only    ${ADMIN_USERNAME}
-    # Để trống password
     Submit Auth Form
 
     Login Page Should Be Open
     Error Message Should Not Be Visible
 
 
-# ══════════════════════════════════════════════════════════════
-# TC-LGN-05: LOGOUT
-# ══════════════════════════════════════════════════════════════
 TC-LGN-05 Logout Should Clear Session And Return To Guest State
     [Documentation]    Login thành công rồi click Logout.
     ...                Kết quả:
@@ -150,7 +130,6 @@ TC-LGN-05 Logout Should Clear Session And Return To Guest State
     ...                - Truy cập /profile bị redirect về /login
     [Tags]    auth    logout    smoke    TC-LGN-05
 
-    # Step 1: Đăng nhập thành công
     Navigate To Login Page
 
     Login With Credentials
@@ -160,18 +139,14 @@ TC-LGN-05 Logout Should Clear Session And Return To Guest State
     Should Be On Home Page
     Navbar Should Show Authenticated State
 
-    # Step 2: Đăng xuất
     Click Logout Button
 
-    # Step 3: Xác nhận trạng thái guest
     Navbar Should Show Guest State
     Navbar Should Not Show Admin Link
 
-    # Step 4: Token phải bị xóa khỏi localStorage
     ${token}=    Get Local Storage Item    token
     Should Be Equal    ${token}    ${None}
 
-    # Step 5: Truy cập protected route phải bị redirect
     Go To               ${URL_PROFILE}
     Wait Until Element Is Visible    ${HEADING_LOGIN}    timeout=${MEDIUM_TIMEOUT}
     Location Should Contain    /login

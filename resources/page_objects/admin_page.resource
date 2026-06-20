@@ -57,7 +57,6 @@ Delete Book By Title
     ${delete_btn}=      Set Variable    ${row_xpath}//button[normalize-space()='Delete']
     Wait Until Element Is Visible    ${delete_btn}    timeout=${MEDIUM_TIMEOUT}
     Click Element       ${delete_btn}
-    # Confirm nếu có dialog
     Run Keyword And Ignore Error    Wait Until Element Is Visible    ${ADMIN_BTN_CONFIRM_DELETE}    timeout=2s
     Run Keyword And Ignore Error    Click Element    ${ADMIN_BTN_CONFIRM_DELETE}
 

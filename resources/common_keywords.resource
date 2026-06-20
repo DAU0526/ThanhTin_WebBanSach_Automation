@@ -18,9 +18,6 @@ Library          SeleniumLibrary
 
 
 *** Keywords ***
-# ──────────────────────────────────────────────────────────────
-# SUITE SETUP / TEARDOWN
-# ──────────────────────────────────────────────────────────────
 
 Suite Setup With Browser
     [Documentation]    Mở browser và điều hướng tới trang chủ.
@@ -38,9 +35,6 @@ Test Teardown With Screenshot
     Run Keyword If Test Failed    Take Screenshot On Failure
     Clear Browser Session Data
 
-# ──────────────────────────────────────────────────────────────
-# AUTHENTICATION WORKFLOWS
-# ──────────────────────────────────────────────────────────────
 
 Login As Admin
     [Documentation]    Login với tài khoản admin chuẩn.
@@ -83,9 +77,6 @@ Ensure Logged In As Admin
     ...    Wait Until Element Is Visible    ${NAV_BTN_LOGOUT}    timeout=3s
     Run Keyword Unless    ${is_logged_in}    Login As Admin
 
-# ──────────────────────────────────────────────────────────────
-# CART WORKFLOWS
-# ──────────────────────────────────────────────────────────────
 
 Add Book To Cart By Title
     [Documentation]    Tìm sách trên Home page và thêm vào cart.
@@ -101,9 +92,6 @@ Clear Cart
     Execute Javascript    window.localStorage.removeItem('cart')
     Reload Page
 
-# ──────────────────────────────────────────────────────────────
-# GENERAL HELPERS
-# ──────────────────────────────────────────────────────────────
 
 Generate Unique Username
     [Documentation]    Tạo username unique dựa trên timestamp.

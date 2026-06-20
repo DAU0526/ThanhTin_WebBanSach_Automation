@@ -12,9 +12,6 @@ Library          SeleniumLibrary
 
 
 *** Keywords ***
-# ──────────────────────────────────────────────────────────────
-# NAVIGATION
-# ──────────────────────────────────────────────────────────────
 
 Click Catalog Link
     Click Element    ${NAV_LINK_CATALOG}
@@ -42,9 +39,6 @@ Click Logout Button
     Click Element    ${NAV_BTN_LOGOUT}
     Wait Until Element Is Visible    ${NAV_LINK_LOGIN}    timeout=${MEDIUM_TIMEOUT}
 
-# ──────────────────────────────────────────────────────────────
-# ASSERTIONS — STATE
-# ──────────────────────────────────────────────────────────────
 
 Navbar Should Show Guest State
     [Documentation]    Khi chưa login, navbar phải có Log in và Create account.
@@ -66,9 +60,6 @@ Navbar Should Not Show Admin Link
     [Documentation]    Customer không được thấy link Admin trong navbar.
     Element Should Not Be Visible    ${NAV_LINK_ADMIN}
 
-# ──────────────────────────────────────────────────────────────
-# ASSERTIONS — CART COUNTER
-# ──────────────────────────────────────────────────────────────
 
 Cart Badge Should Show
     [Documentation]    Xác nhận badge cart hiển thị số lượng nhất định.

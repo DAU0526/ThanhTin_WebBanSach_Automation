@@ -1,6 +1,7 @@
 *** Settings ***
 Documentation    Cart page keywords.
 Resource         ../locators/cart_locators.resource
+Resource         ../locators/navbar_locators.resource
 Resource         ../variables/global_variables.resource
 Library          SeleniumLibrary
 Library          Collections
@@ -15,7 +16,8 @@ Cart Page Should Be Open
     Wait Until Element Is Visible    ${CART_ORDER_SUMMARY}    timeout=${MEDIUM_TIMEOUT}
 
 Navigate To Catalog
-    Go To    ${URL_HOME}
+    Wait Until Element Is Visible    ${NAV_LINK_CATALOG}    timeout=${MEDIUM_TIMEOUT}
+    Click Element    ${NAV_LINK_CATALOG}
     Wait Until Element Is Visible    ${HOME_HERO_HEADING}    timeout=${LONG_TIMEOUT}
 
 Prepare Clean Cart State
@@ -76,7 +78,9 @@ Add Same Book To Cart Twice
     [Documentation]    Add same book twice.
     [Arguments]    ${book_title}
     Add Book To Cart From Catalog    ${book_title}
-    Add Book To Cart From Catalog    ${book_title}
+    Click Cart Icon In Navbar
+    Increase Quantity For Item    ${book_title}
+    Navigate To Catalog
 
 Open Cart And Verify Book
     [Documentation]    Open cart and verify book.
@@ -152,7 +156,12 @@ Decrease Quantity For Item
     Wait Until Element Is Visible    ${button}    timeout=${MEDIUM_TIMEOUT}
     Click Element    ${button}
     ${expected}=    Evaluate    ${old_quantity} - 1
-    Wait Until Keyword Succeeds    5x    500ms    Cart Item Quantity Should Be    ${book_title}    ${expected}
+    IF    ${expected} > 0
+        Wait Until Keyword Succeeds    5x    500ms    Cart Item Quantity Should Be    ${book_title}    ${expected}
+    ELSE
+        ${item}=    Get Cart Item Locator    ${book_title}
+        Wait Until Element Is Not Visible    ${item}    timeout=${MEDIUM_TIMEOUT}
+    END
 
 Remove Item From Cart
     [Arguments]    ${book_title}
@@ -266,3 +275,16 @@ Find Lowest Stock Available Book From API
     ...      })
     ...      .catch(() => done([]));
     RETURN    ${book}
+
+Get Book Price From API
+    [Arguments]    ${book_title}
+    ${price}=    Execute Async Javascript
+    ...    const done = arguments[arguments.length - 1];
+    ...    fetch('/api/books')
+    ...      .then((response) => response.json())
+    ...      .then((books) => {
+    ...        const book = books.find((item) => item.title === '${book_title}');
+    ...        done(book ? Number(book.price) : 0);
+    ...      })
+    ...      .catch(() => done(0));
+    RETURN    ${price}

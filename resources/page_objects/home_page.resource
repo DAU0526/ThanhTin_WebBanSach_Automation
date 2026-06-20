@@ -14,9 +14,6 @@ Library          SeleniumLibrary
 
 
 *** Keywords ***
-# ──────────────────────────────────────────────────────────────
-# NAVIGATION
-# ──────────────────────────────────────────────────────────────
 
 Navigate To Home Page
     Go To               ${URL_HOME}
@@ -29,9 +26,6 @@ Switch To All Books Tab
 Switch To Recent Tab
     Click Element       ${HOME_TAB_RECENT}
 
-# ──────────────────────────────────────────────────────────────
-# SEARCH
-# ──────────────────────────────────────────────────────────────
 
 Search For Book
     [Documentation]    Nhập từ khoá vào ô tìm kiếm. Kết quả filter client-side.
@@ -39,16 +33,12 @@ Search For Book
     Wait Until Element Is Visible    ${HOME_SEARCH_INPUT}    timeout=${MEDIUM_TIMEOUT}
     Clear Element Text               ${HOME_SEARCH_INPUT}
     Input Text                       ${HOME_SEARCH_INPUT}    ${query}
-    # Đợi ít nhất một kết quả (hoặc no-results) xuất hiện
     Wait Until Element Is Visible    ${HOME_BOOK_GRID}    timeout=${MEDIUM_TIMEOUT}
 
 Clear Search
     Clear Element Text    ${HOME_SEARCH_INPUT}
     Press Keys            ${HOME_SEARCH_INPUT}    CTRL+a    DELETE
 
-# ──────────────────────────────────────────────────────────────
-# BOOK CARD INTERACTIONS
-# ──────────────────────────────────────────────────────────────
 
 Get Book Card By Title
     [Documentation]    Trả về XPath của book card theo tiêu đề sách.
@@ -71,9 +61,6 @@ Click Book Card To Open Detail
     Wait Until Element Is Visible    ${link_xpath}    timeout=${MEDIUM_TIMEOUT}
     Click Element       ${link_xpath}
 
-# ──────────────────────────────────────────────────────────────
-# FILTERS
-# ──────────────────────────────────────────────────────────────
 
 Select Category Filter
     [Documentation]    Mở dropdown Category và chọn theo tên.
@@ -91,9 +78,6 @@ Select Price Range Filter
     Wait Until Element Is Visible    ${option}    timeout=${SHORT_TIMEOUT}
     Click Element       ${option}
 
-# ──────────────────────────────────────────────────────────────
-# ASSERTIONS
-# ──────────────────────────────────────────────────────────────
 
 Book Card Should Be Visible
     [Arguments]         ${title}
