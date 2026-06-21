@@ -5,6 +5,10 @@ Resource         ../variables/global_variables.resource
 Library          SeleniumLibrary
 
 *** Keywords ***
+Try To Access Admin Dashboard
+    [Documentation]    Go to the admin URL without waiting for dashboard elements.
+    Go To    ${URL_ADMIN}
+
 Switch To Management Tab
     [Documentation]    Switch to the Management tab.
     Wait Until Element Is Visible    ${TAB_MANAGEMENT}    timeout=${MEDIUM_TIMEOUT}

@@ -8,34 +8,34 @@ Documentation    Login & Logout Test Suite — Tiny Bookstore
 ...              - TC-LGN-04 Login With Empty Fields
 ...              - TC-LGN-05 Logout
 ...
-...              Tất cả test dùng tài khoản "admin / admin123":
-...              - Được seed tự động khi server khởi động (server.ts:setupDatabase)
-...              - Không bao giờ bị xóa hoặc thay đổi password trong test
+...              All tests use the default seeded account:
+...              - Auto-seeded when server starts (server.ts:setupDatabase)
+...              - Never deleted or password-changed during tests
 ...
-...              Setup: Mở browser một lần cho cả suite.
-...              Teardown: Mỗi test xóa session (localStorage + cookies).
+...              Setup: Open browser once for the suite.
+...              Teardown: Each test clears session (localStorage + cookies).
 
 Resource         ../../resources/page_objects/auth_page.resource
 Resource         ../../resources/page_objects/navbar_page.resource
 Resource         ../../resources/browser_keywords.resource
-Library          SeleniumLibrary
+Resource         ../../resources/common_keywords.resource
 
 Suite Setup      Open Browser With Config    ${BASE_URL}
 Suite Teardown   Close Browser Session
 
 Test Setup       Clear Browser Session Data
-Test Teardown    Run Keyword If Test Failed    Take Screenshot On Failure
+Test Teardown    Test Teardown With Screenshot
 
 
 *** Test Cases ***
 
 TC-LGN-01 Login With Valid Admin Credentials Should Succeed
-    [Documentation]    Login với admin/admin123 (tài khoản seeded mặc định).
-    ...                Kết quả:
-    ...                - Redirect về trang chủ "/"
-    ...                - Navbar hiện nút Logout
-    ...                - Navbar hiện link "Admin" (vì role=admin)
-    ...                - Không có thông báo lỗi
+    [Documentation]    Login with admin/admin123 (default seeded account).
+    ...                Result:
+    ...                - Redirect to home page "/"
+    ...                - Navbar shows Logout button
+    ...                - Navbar shows "Admin" link (role=admin)
+    ...                - No error message
     [Tags]    auth    login    smoke    TC-LGN-01
 
     Navigate To Login Page
@@ -51,11 +51,11 @@ TC-LGN-01 Login With Valid Admin Credentials Should Succeed
 
 
 TC-LGN-02 Login With Wrong Password Should Fail
-    [Documentation]    Login với username đúng nhưng password sai.
-    ...                Kết quả:
-    ...                - Không redirect, vẫn ở /login
-    ...                - Hiện lỗi "Invalid credentials"
-    ...                - Không có token trong localStorage
+    [Documentation]    Login with correct username but wrong password.
+    ...                Result:
+    ...                - No redirect, stay at /login
+    ...                - Show "Invalid credentials" error
+    ...                - No token in localStorage
     [Tags]    auth    login    negative    TC-LGN-02
 
     Navigate To Login Page
@@ -73,11 +73,11 @@ TC-LGN-02 Login With Wrong Password Should Fail
 
 
 TC-LGN-03 Login With Non-Existent Username Should Fail
-    [Documentation]    Login với username không tồn tại trong hệ thống.
-    ...                Kết quả:
-    ...                - Không redirect, vẫn ở /login
-    ...                - Hiện lỗi "Invalid credentials"
-    ...                - Server không tiết lộ user tồn tại hay không
+    [Documentation]    Login with non-existent username in the system.
+    ...                Result:
+    ...                - No redirect, stay at /login
+    ...                - Show "Invalid credentials" error
+    ...                - Server does not reveal if user exists
     [Tags]    auth    login    negative    TC-LGN-03
 
     Navigate To Login Page
@@ -92,10 +92,10 @@ TC-LGN-03 Login With Non-Existent Username Should Fail
 
 
 TC-LGN-04 Login With Empty Username And Password Should Be Blocked
-    [Documentation]    Submit form login hoàn toàn trống.
-    ...                username và password đều có thuộc tính "required".
-    ...                Browser chặn submit — HTML5 required validation.
-    ...                Kết quả: form không gửi, không có server error.
+    [Documentation]    Submit completely empty login form.
+    ...                username and password have "required" attribute.
+    ...                Browser blocks submit — HTML5 required validation.
+    ...                Result: form not submitted, no server error.
     [Tags]    auth    login    negative    validation    TC-LGN-04
 
     Navigate To Login Page
@@ -108,8 +108,8 @@ TC-LGN-04 Login With Empty Username And Password Should Be Blocked
 
 
 TC-LGN-04B Login With Empty Password Only Should Be Blocked
-    [Documentation]    Điền username nhưng để trống password (required).
-    ...                Kết quả: browser chặn, vẫn ở /login.
+    [Documentation]    Fill username but leave password empty (required).
+    ...                Result: browser blocks, stay at /login.
     [Tags]    auth    login    negative    validation    TC-LGN-04
 
     Navigate To Login Page
@@ -122,11 +122,11 @@ TC-LGN-04B Login With Empty Password Only Should Be Blocked
 
 
 TC-LGN-05 Logout Should Clear Session And Return To Guest State
-    [Documentation]    Login thành công rồi click Logout.
-    ...                Kết quả:
-    ...                - Navbar trở về trạng thái guest (hiện "Log in")
-    ...                - Link "Admin" biến mất khỏi navbar
-    ...                - Token bị xóa khỏi localStorage
+    [Documentation]    Login successfully then click Logout.
+    ...                Result:
+    ...                - Navbar returns to guest state (shows "Log in")
+    ...                - "Admin" link disappears from navbar
+    ...                - Token is removed from localStorage
     ...                - Truy cập /profile bị redirect về /login
     [Tags]    auth    logout    smoke    TC-LGN-05
 
@@ -147,9 +147,8 @@ TC-LGN-05 Logout Should Clear Session And Return To Guest State
     ${token}=    Get Local Storage Item    token
     Should Be Equal    ${token}    ${None}
 
-    Go To               ${URL_PROFILE}
-    Wait Until Element Is Visible    ${HEADING_LOGIN}    timeout=${MEDIUM_TIMEOUT}
-    Location Should Contain    /login
+    Go To    ${URL_PROFILE}
+    Login Page Should Be Open
 
 
 TC-LGN-06 Password Visibility Toggle Should Work

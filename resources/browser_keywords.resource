@@ -15,7 +15,7 @@ Library          SeleniumLibrary
 
 
 Open Browser With Config
-    [Documentation]    Mở browser theo cấu hình trong global_variables.
+    [Documentation]    Open browser according to configuration in global_variables.
     [Arguments]    ${url}=${BASE_URL}
 
     ${options}=    Get Chrome Options
@@ -64,12 +64,12 @@ Get Chrome Options
 
 
 Close Browser Session
-    [Documentation]    Đóng browser và dọn dẹp WebDriver instance.
+    [Documentation]    Close browser and clean up WebDriver instance.
     Close All Browsers
 
 
 Take Screenshot On Failure
-    [Documentation]    Chụp screenshot khi test fail.
+    [Documentation]    Capture screenshot when test fails.
 
     ${timestamp}=    Evaluate    __import__('datetime').datetime.now().strftime('%Y%m%d_%H%M%S_%f')
     ${filename}=     Set Variable    failure_${timestamp}.png
@@ -79,11 +79,12 @@ Take Screenshot On Failure
 
 
 Clear Browser Session Data
-    [Documentation]    Xóa localStorage và cookies.
+    [Documentation]    Clear localStorage and cookies.
 
     Execute Javascript    window.localStorage.clear()
     Execute Javascript    window.sessionStorage.clear()
     Delete All Cookies
+    Reload Page
 
 
 Clear Local Storage

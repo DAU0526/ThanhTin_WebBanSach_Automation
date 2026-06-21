@@ -1,0 +1,36 @@
+# ============================================================
+# Robot Framework — Project Configuration
+# ============================================================
+# Usage:
+#   robot --argumentfile robot.yaml tests/
+#
+# Override environment:
+#   robot --variable ENV:staging --variable BASE_URL:http://localhost:5173 --argumentfile robot.yaml tests/
+# ============================================================
+
+# ── Output ──────────────────────────────────────────────────
+--outputdir          results
+--loglevel           INFO
+--timestampoutputs
+
+# ── Tagging ─────────────────────────────────────────────────
+--tagstatcombine     smoke
+--tagstatcombine     auth
+--tagstatcombine     cart
+--tagstatcombine     checkout
+--tagstatcombine     admin
+--tagstatcombine     negative
+
+# ── Listeners & Plugins ─────────────────────────────────────
+# Uncomment to enable parallel execution:
+# --listener    pabot.PabotListener
+
+# ── Screenshots ─────────────────────────────────────────────
+# Disable automatic screenshot on failure from SeleniumLibrary
+# (we handle it manually via Test Teardown)
+--variable           SELENIUM_SCREENSHOT_ON_FAILURE:None
+
+# ── Default Variables ───────────────────────────────────────
+--variable           ENV:production
+--variable           BROWSER:chrome
+--variable           HEADLESS:False

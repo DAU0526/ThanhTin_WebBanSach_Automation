@@ -1,5 +1,7 @@
 *** Settings ***
-Documentation    Cart locators.
+Documentation    Cart page locators.
+...              NOTE: Home page locators (HOME_HERO_HEADING, TAB_ALL_BOOKS, INPUT_SEARCH_BOX)
+...              are imported via cart_page.resource -> home_page.resource -> home_locators.resource.
 
 *** Variables ***
 ${CART_PAGE_HEADING}                xpath=//h1[normalize-space()='Your cart']
@@ -15,10 +17,4 @@ ${CART_TOTAL_VALUE}                 xpath=//aside[.//h2[normalize-space()='Order
 ${CART_LOGIN_REQUIRED_MESSAGE}      xpath=//aside//*[normalize-space()='Please log in before checking out.']
 ${CART_CHECKOUT_BUTTON}             xpath=//aside//button[normalize-space()='Checkout now' or normalize-space()='Processing order...']
 
-${NAV_LINK_CART}                    xpath=//nav//a[contains(@href,'/cart')]
-${NAV_CART_BADGE}                   xpath=//nav//a[contains(@href,'/cart')]//span[contains(@class,'rounded-full')]
-
-${HOME_HERO_HEADING}                xpath=//h1[contains(normalize-space(),'Build your reading stack')]
-${HOME_TAB_ALL_BOOKS}               xpath=//button[normalize-space()='All Books']
-${HOME_SEARCH_INPUT}                xpath=//input[@placeholder='Search by title or author...']
 ${HOME_OUT_OF_STOCK_BADGE}          xpath=//span[normalize-space()='Out of stock']

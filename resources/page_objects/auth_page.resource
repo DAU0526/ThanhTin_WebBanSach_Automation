@@ -84,6 +84,12 @@ Register With Full Data
     Fill Register Form  ${full_name}    ${username}    ${email}    ${password}
     Submit Auth Form
 
+Register Without Email
+    [Documentation]    Fill form completely except email and submit.
+    [Arguments]         ${full_name}    ${username}    ${password}
+    Fill Register Form Without Email    ${full_name}    ${username}    ${password}
+    Submit Auth Form
+
 
 
 

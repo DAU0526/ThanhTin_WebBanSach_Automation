@@ -1,10 +1,10 @@
 *** Settings ***
 Documentation    Checkout Test Suite — Tiny Bookstore
 ...
-...              Bao gồm các test case cho:
-...              - Checkout thành công (end-to-end)
-...              - Checkout khi chưa login
-...              - Stock verification sau checkout
-...              - Giá tại thời điểm mua (price at purchase)
+...              Includes test cases for:
+...              - Successful checkout (end-to-end)
+...              - Checkout without login
+...              - Stock verification after checkout
+...              - Price at purchase validation
 ...
-...              Cần implement test case — framework đã sẵn sàng.
+...              Status: Test cases implemented — framework is ready.

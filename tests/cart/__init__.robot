@@ -1,11 +1,11 @@
 *** Settings ***
 Documentation    Cart Management Test Suite — Tiny Bookstore
 ...
-...              Bao gồm các test case cho:
-...              - Thêm sách vào giỏ hàng
-...              - Thay đổi số lượng
-...              - Xóa item khỏi giỏ hàng
-...              - Persistence qua localStorage
+...              Includes test cases for:
+...              - Adding books to cart
+...              - Changing quantities
+...              - Removing items from cart
+...              - Persistence via localStorage
 ...              - Out-of-stock guard
 ...
-...              Cần implement test case — framework đã sẵn sàng.
+...              Status: Test cases implemented — framework is ready.

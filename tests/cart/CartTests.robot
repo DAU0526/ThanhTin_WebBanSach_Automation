@@ -1,16 +1,16 @@
 *** Settings ***
-Documentation     Cart tests.
+Documentation     Cart Test Suite — Tiny Bookstore
+...               Covers adding, removing, updating quantity in cart,
+...               cart persistence, and checkout button states.
 Resource          ../../resources/page_objects/cart_page.resource
 Resource          ../../resources/page_objects/auth_page.resource
 Resource          ../../resources/page_objects/navbar_page.resource
 Resource          ../../resources/browser_keywords.resource
-Resource          ../../resources/variables/global_variables.resource
-Library           SeleniumLibrary
-Library           Collections
+Resource          ../../resources/common_keywords.resource
 Suite Setup       Setup Cart Suite
 Suite Teardown    Close Browser Session
 Test Setup        Prepare Clean Cart State
-Test Teardown     Run Keyword If Test Failed    Take Screenshot On Failure
+Test Teardown     Test Teardown With Screenshot
 
 *** Variables ***
 ${BOOK_A}           Làm Bạn Với Bầu Trời

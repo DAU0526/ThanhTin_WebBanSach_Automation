@@ -1,231 +1,370 @@
-# Tiny Bookstore — QA Automation Framework
+Automation Testing Framework cho hệ thống:
 
-**Tác giả:** Nguyễn Thành Tín
+**Tiny Bookstore Management System** ([tiny-bookstore.vercel.app](https://tiny-bookstore.vercel.app))
 
-Framework kiểm thử tự động cho dự án **Tiny Bookstore** ([tiny-bookstore.vercel.app](https://tiny-bookstore.vercel.app)), xây dựng trên **Robot Framework + SeleniumLibrary** theo pattern **Page Object Model (POM)**.
+Framework sử dụng để tự động kiểm thử giao diện Web Application.
+
+### Mục tiêu:
+- Automation UI Testing
+- Kiểm thử chức năng Đăng ký & Đăng nhập (Authentication)
+- Kiểm thử chức năng Giỏ hàng & Thanh toán (Cart & Checkout)
+- Kiểm thử chức năng Tìm kiếm & Lọc sách (Home Catalog)
+- Quản trị viên quản lý sách (Admin CRUD)
+- Regression Testing
+- Generate Test Report tự động
 
 ---
 
-## Yêu cầu hệ thống
+## Technology Stack
+| Technology | Usage |
+|---|---|
+| Python | Programming Language |
+| Robot Framework | Automation Framework |
+| SeleniumLibrary | Web Automation |
+| ChromeDriver | Browser Driver |
+| YAML | Environment Configuration |
+| Page Object Model | Test Architecture |
 
-| Công cụ | Phiên bản tối thiểu |
+---
+
+## Requirements
+| Tool | Version |
 |---|---|
 | Python | 3.10+ |
-| Google Chrome | 120+ |
-| ChromeDriver | Tương ứng với Chrome |
-| pip | 23+ |
+| Google Chrome | Latest |
+| ChromeDriver | Match Chrome |
+| Robot Framework | 7.x |
+
+Check version:
+```bash
+python --version
+robot --version
+```
 
 ---
 
-## Cài đặt
+## Installation
 
-### 1. Tạo virtual environment
-
+**Clone Repository**
 ```bash
-# Tại thư mục gốc của project này
+git clone https://github.com/your-username/tiny-bookstore-automation.git
+cd tiny-bookstore-automation
+```
+
+**Create Virtual Environment**
+Windows:
+```bash
 python -m venv venv
-
-# Windows
 venv\Scripts\activate
-
-# macOS / Linux
+```
+Linux / Mac:
+```bash
+python3 -m venv venv
 source venv/bin/activate
 ```
 
-### 2. Cài đặt dependencies
-
+**Install Libraries**
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Cài đặt ChromeDriver
-
-ChromeDriver phải trùng phiên bản với Chrome đang dùng.
-
-**Cách nhanh nhất (tự động qua Selenium Manager):**
-
-Selenium 4.6+ tích hợp Selenium Manager — tự động tải đúng ChromeDriver.
-Bạn chỉ cần cài Chrome và chạy test bình thường.
-
-**Cách thủ công:**
-
-```bash
-# Kiểm tra phiên bản Chrome
-google-chrome --version   # Linux/Mac
-# Vào chrome://settings/help trên Windows
-
-# Tải ChromeDriver tương ứng
-# https://googlechromelabs.github.io/chrome-for-testing/
-```
-
 ---
 
-## Cấu trúc thư mục
-
-```
+## Project Structure
+```text
 tiny-bookstore-automation/
 │
 ├── resources/
-│   ├── locators/               # XPath/CSS selectors theo từng trang
+│   ├── locators/
 │   │   ├── admin_locators.resource
 │   │   ├── auth_locators.resource
 │   │   ├── book_detail_locators.resource
 │   │   ├── cart_locators.resource
+│   │   ├── checkout_locators.resource
 │   │   ├── home_locators.resource
-│   │   ├── navbar_locators.resource
-│   │   └── orders_locators.resource
+│   │   └── navbar_locators.resource
 │   │
-│   ├── page_objects/           # POM — keywords theo từng trang
+│   ├── page_objects/
 │   │   ├── admin_page.resource
 │   │   ├── auth_page.resource
 │   │   ├── book_detail_page.resource
 │   │   ├── cart_page.resource
 │   │   ├── checkout_page.resource
 │   │   ├── home_page.resource
-│   │   ├── navbar_page.resource
-│   │   └── orders_page.resource
+│   │   └── navbar_page.resource
 │   │
-│   ├── test_data/              # Dữ liệu test (YAML)
-│   │   ├── users.yaml
+│   ├── test_data/
 │   │   └── books.yaml
-│   │
-│   ├── variables/              # Biến global cho toàn suite
+│   ├── variables/
 │   │   └── global_variables.resource
-│   │
-│   ├── common_keywords.resource    # High-level business workflows
-│   ├── browser_keywords.resource   # Browser setup/teardown/session
-│   └── environment.yaml            # Config theo môi trường (prod/staging/ci)
+│   ├── browser_keywords.resource
+│   ├── common_keywords.resource
+│   └── environment.yaml
+│
+├── results/
+│   ├── log.html
+│   ├── output.xml
+│   └── report.html
 │
 ├── tests/
-│   ├── admin/                  # Test Admin Dashboard + Books CRUD
-│   ├── auth/                   # Test Login, Register, Logout
-│   ├── book_detail/            # Test Book Detail Page
-│   ├── cart/                   # Test Cart management
-│   ├── checkout/               # Test Checkout flow (end-to-end)
-│   ├── home/                   # Test Home Catalog, Search, Filter
-│   └── orders/                 # Test Purchase History & Orders
+│   ├── admin/
+│   │   └── AdminBooksTests.robot
+│   ├── auth/
+│   │   ├── LoginTests.robot
+│   │   └── RegisterTests.robot
+│   ├── book_detail/
+│   │   └── BookDetailTests.robot
+│   ├── cart/
+│   │   └── CartTests.robot
+│   ├── checkout/
+│   │   └── CheckoutTests.robot
+│   └── home/
+│   │   └── HomeTests.robot
 │
-├── results/                    # Output: log.html, report.html, screenshots
-│
+├── .gitignore
+├── robot.yaml
 ├── requirements.txt
-├── README.md
-└── .gitignore
+└── README.md
 ```
 
 ---
 
-## Chạy Test
-
-### Chạy toàn bộ test suite
-
-```bash
-robot --outputdir results tests/
-```
-
-### Chạy một suite cụ thể
-
-```bash
-robot --outputdir results tests/auth/
-robot --outputdir results tests/checkout/
-robot --outputdir results tests/admin/
-```
-
-### Chạy trên môi trường khác (staging / CI)
-
-```bash
-# Chạy trên localhost (staging)
-robot --variable ENV:staging --variable BASE_URL:http://localhost:5173 --outputdir results tests/
-
-# Chạy headless (cho CI/CD pipeline)
-robot --variable HEADLESS:True --outputdir results tests/
-```
-
-### Chạy test có tag cụ thể
-
-```bash
-# Chỉ chạy smoke tests
-robot --include smoke --outputdir results tests/
-
-# Bỏ qua test đang bị skip
-robot --exclude skip --outputdir results tests/
-```
-
-### Xem báo cáo
-
-```bash
-# Mở log.html sau khi chạy xong
-start results/log.html        # Windows
-open results/log.html         # macOS
-xdg-open results/log.html     # Linux
+## Automation Architecture
+```text
+Test Cases
+      |
+      v
+Common Keywords
+      |
+      v
+Page Objects
+      |
+      v
+Locators
+      |
+      v
+Tiny Bookstore Application
 ```
 
 ---
 
-## Kiến trúc POM
+## Test Coverage
 
-```
-Test Case (.robot)
-    └── common_keywords.resource       ← Business workflows
-            └── page_objects/*.resource    ← Page-level interactions
-                    └── locators/*.resource     ← XPath/CSS selectors
-```
+### Authentication Testing
+**Login**
+File: `tests/auth/LoginTests.robot`
+Test Cases:
+| ID | Description |
+|---|---|
+| TC-LGN-01 | Login With Valid Admin Credentials Should Succeed |
+| TC-LGN-02 | Login With Wrong Password Should Fail |
+| TC-LGN-03 | Login With Non-Existent Username Should Fail |
+| TC-LGN-04 | Login With Empty Username And Password Should Be Blocked |
+| TC-LGN-05 | Logout Should Clear Session And Return To Guest State |
+| TC-LGN-06 | Password Visibility Toggle Should Work |
 
-**Nguyên tắc:**
-- **Locators**: Chỉ chứa biến XPath/CSS. Không logic.
-- **Page Objects**: Keyword theo từng trang. Gọi locators, không hardcode XPath.
-- **Common Keywords**: Ghép nhiều bước thành workflow (vd: "Login As Admin").
-- **Test Cases**: Chỉ gọi high-level keywords. Không dùng Selenium trực tiếp.
+**Register**
+File: `tests/auth/RegisterTests.robot`
+Test Cases:
+| ID | Description |
+|---|---|
+| TC-REG-01 | Register With Valid Data Should Succeed |
+| TC-REG-02 | Register With Existing Username Should Fail |
+| TC-REG-03 | Register With Existing Email Should Fail |
+| TC-REG-04 | Register With Invalid Email Format Should Be Blocked |
+| TC-REG-05 | Register With Empty Required Fields Should Be Blocked |
+| TC-REG-06 | Register Without Email Should Succeed |
+
+### Catalog & Search Testing
+**Home / Catalog**
+File: `tests/home/HomeTests.robot`
+Test Cases:
+| ID | Description |
+|---|---|
+| TC-HOME-01 | Load Books Successfully |
+| TC-HOME-02 | Search Existing Book |
+| TC-HOME-03 | Search Non Existing Book |
+| TC-HOME-04 | Clear Search |
+| TC-HOME-05 | Filter By Category |
+
+### Cart & Checkout Testing
+**Cart Management**
+File: `tests/cart/CartTests.robot`
+Test Cases:
+| ID | Description |
+|---|---|
+| TC-CART-01 | Add Book To Cart |
+| TC-CART-02 | Increase Quantity |
+| TC-CART-03 | Decrease Quantity |
+| TC-CART-04 | Remove Item |
+| TC-CART-05 | Verify Cart Total |
+
+**Checkout**
+File: `tests/checkout/CheckoutTests.robot`
+Test Cases:
+| ID | Description |
+|---|---|
+| TC-CHK-01 | Checkout Success |
+| TC-CHK-02 | Checkout Empty Cart |
+| TC-CHK-03 | Checkout Without Login |
+| TC-CHK-04 | Order Appears In Profile History After Checkout |
+
+=================
+**Total: ~50 Tests** (bao gồm các module Book Detail và Admin)
+=================
 
 ---
 
-## Thêm Test Case Mới
+## Running Tests
 
-1. Tạo file `.robot` trong thư mục `tests/<module>/`
-2. Import `common_keywords.resource` trong `*** Settings ***`
-3. Thêm locators mới vào `resources/locators/` nếu cần
-4. Thêm keyword mới vào page object tương ứng nếu cần
-5. Gọi keyword từ `common_keywords` trong test case
+**Run All Tests (Sử dụng config từ robot.yaml)**
+```bash
+robot --argumentfile robot.yaml tests/
+```
 
-**Ví dụ test case đơn giản:**
+**Run Login Test**
+```bash
+robot --argumentfile robot.yaml tests/auth/LoginTests.robot
+```
 
+**Run Checkout Test**
+```bash
+robot --argumentfile robot.yaml tests/checkout/CheckoutTests.robot
+```
+
+---
+
+## Test Report
+After execution:
+```text
+results/
+├── output.xml
+├── log.html
+└── report.html
+```
+Open report (Windows):
+```bash
+start results/log.html
+```
+
+---
+
+## Page Object Model
+
+### Locator Layer
+Contains:
+- XPath
+- CSS Selector
+
+Example (`auth_locators.resource`):
 ```robot
-*** Settings ***
-Resource    ../../resources/common_keywords.resource
+*** Variables ***
+${INPUT_USERNAME}    id=username
+${INPUT_PASSWORD}    id=password
+${BTN_SUBMIT}        xpath=//form//button[@type='submit']
+```
 
+### Page Object Layer
+Contains:
+- Click action
+- Input action
+- Navigation
+
+Example (`auth_page.resource`):
+```robot
+*** Keywords ***
+Fill Login Form
+    [Arguments]    ${username}    ${password}
+    Input Text     ${INPUT_USERNAME}    ${username}
+    Input Text     ${INPUT_PASSWORD}    ${password}
+
+Submit Auth Form
+    Click Button   ${BTN_SUBMIT}
+```
+
+### Test Layer
+Only contains:
+- Test scenario
+- Expected result
+
+Example (`LoginTests.robot`):
+```robot
 *** Test Cases ***
-Admin Can Access Dashboard
-    [Tags]    smoke    admin
-    Suite Setup With Browser
-    Login As Admin
-    Navigate To Admin Dashboard
-    Admin Dashboard Should Be Accessible
-    [Teardown]    Suite Teardown With Browser
+TC_01 Valid Login Should Succeed
+    Navigate To Login Page
+    Fill Login Form    ${ADMIN_USERNAME}    ${ADMIN_PASSWORD}
+    Submit Auth Form
+    Should Be On Home Page
 ```
 
 ---
 
-## Biến cấu hình thường dùng
+## Environment Configuration
+File: `resources/environment.yaml`
 
-| Biến | Mặc định | Mô tả |
-|---|---|---|
-| `${BASE_URL}` | `https://tiny-bookstore.vercel.app` | URL gốc của ứng dụng |
-| `${BROWSER}` | `chrome` | Browser (chrome, firefox, edge) |
-| `${HEADLESS}` | `${FALSE}` | Chạy không hiện browser |
-| `${ADMIN_USERNAME}` | `admin` | Tài khoản admin |
-| `${ADMIN_PASSWORD}` | `admin123` | Mật khẩu admin |
+Example:
+```yaml
+production:
+  base_url: "https://tiny-bookstore.vercel.app"
+  browser: "chrome"
+  headless: false
+
+credentials:
+  admin:
+    username: "admin"
+    password: "admin123"
+```
 
 ---
 
-## Xử lý lỗi thường gặp
+## Troubleshooting
 
-**`WebDriverException: ChromeDriver not found`**
-→ Selenium Manager sẽ tự tải. Nếu không, tải thủ công và thêm vào PATH.
+**Element Not Found**
+Cause:
+- Wrong XPath
+- Page loading slow
 
-**`ElementNotInteractableException`**
-→ Tăng timeout hoặc thêm `Wait Until Element Is Visible` trước khi tương tác.
+Solution:
+```robot
+Wait Until Element Is Visible    ${LOCATOR}    timeout=10s
+```
 
-**`StaleElementReferenceException`**
-→ SPA React re-render element. Dùng `Wait Until Element Is Visible` lại sau navigation.
+**Keyword Not Found**
+Check resource:
+```robot
+Resource    ../resources/common_keywords.resource
+```
 
-**Test fail vì auth token hết hạn**
-→ Gọi `Clear Browser Session Data` trong Test Teardown để reset trạng thái.
+**Browser Not Open**
+Check:
+```robot
+Suite Setup    Open Browser With Config    ${BASE_URL}
+```
+
+---
+
+## Git Workflow
+Check changes:
+```bash
+git status
+```
+Add:
+```bash
+git add .
+```
+Commit:
+```bash
+git commit -m "Update automation tests"
+```
+Push:
+```bash
+git push origin main
+```
+
+---
+
+## Future Improvements
+- [ ] Add GitHub Actions CI/CD
+- [ ] Implement Data-Driven Testing cho các form (Login/Register)
+- [ ] Mở rộng scope test cho Profile Management
+- [ ] Tích hợp API Testing để verify Database State sau khi Checkout

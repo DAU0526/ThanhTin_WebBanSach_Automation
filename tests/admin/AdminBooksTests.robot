@@ -5,16 +5,11 @@ Resource         ../../resources/page_objects/admin_page.resource
 Resource         ../../resources/page_objects/auth_page.resource
 Resource         ../../resources/common_keywords.resource
 Suite Setup      Open Browser With Config    ${BASE_URL}
-Suite Teardown   Close All Browsers
-Test Setup       Reset Test State
+Suite Teardown   Close Browser Session
+Test Setup       Reset Admin Test State
+Test Teardown    Test Teardown With Screenshot
 
 *** Variables ***
-${ADMIN_USER}       admin
-${ADMIN_PASS}       admin123
-
-${CUSTOMER_USER}    qa_testuser
-${CUSTOMER_PASS}    Test@12345
-
 ${TEST_BOOK_TITLE}    Auto Test Book
 ${TEST_BOOK_AUTHOR}   Auto Author
 ${TEST_BOOK_PRICE}    150000
@@ -24,38 +19,32 @@ ${UPDATED_TITLE}      Auto Test Book Updated
 
 *** Keywords ***
 Login As Admin And Go To Dashboard
-    [Documentation]    Helper: Log in with admin credentials and navigate to the dashboard.
-    Go To    ${URL_LOGIN}
-    Login With Credentials    ${ADMIN_USER}    ${ADMIN_PASS}
-    Wait Until Location Is    ${URL_HOME}    timeout=${MEDIUM_TIMEOUT}
-    Go To    ${BASE_URL}/admin
+    [Documentation]    Log in with admin credentials and navigate to the admin dashboard.
+    Login As Admin
+    Navigate To Admin Dashboard
+
+Navigate To Admin Dashboard
+    [Documentation]    Navigate to the /admin page and wait for it to load.
+    Go To    ${URL_ADMIN}
     Wait Until Element Is Visible    ${TAB_MANAGEMENT}    timeout=${MEDIUM_TIMEOUT}
 
-Go To Home Page And Refresh
-    [Documentation]    Reset trạng thái sau mỗi test.
-    Go To    ${URL_HOME}
-
-Ensure Logged Out
-    [Documentation]    Remove token from localStorage to ensure a logged-out state.
-    Execute Javascript    localStorage.removeItem('token');
-
-Reset Test State
-    [Documentation]    Reset state after each test.
+Reset Admin Test State
+    [Documentation]    Reset state: ensure logged out and go to home.
     Ensure Logged Out
-    Go To Home Page And Refresh
 
 *** Test Cases ***
 TC-ADM-01 Unauthorized Access
     [Documentation]    Customers cannot access the /admin page.
+    ...                Non-admin users are redirected back to Home.
     [Tags]    admin    TC-ADM-01    negative
-    # Register a new user (defaults to customer role)
-    Go To    ${URL_REGISTER}
-    Register With Full Data    Test Customer    test_cust_01    test_cust_01@test.com    Customer@123
-    Wait Until Location Is    ${URL_HOME}    timeout=${MEDIUM_TIMEOUT}
-    # The account is now logged in with customer privileges
-    Go To    ${BASE_URL}/admin
+    ${username}=    Generate Unique Username
+    ${email}=       Generate Unique Email
+    Navigate To Register Page
+    Register With Full Data    Test Customer    ${username}    ${email}    Customer@123
+    Should Be On Home Page
+    Try To Access Admin Dashboard
     # App.tsx logic: if user role is not admin, redirect to Home (/)
-    Wait Until Location Is    ${URL_HOME}    timeout=${MEDIUM_TIMEOUT}
+    Should Be On Home Page
 
 TC-ADM-02 View Inventory
     [Documentation]    Admin can access the Inventory tab and view the list of books.
@@ -89,10 +78,7 @@ TC-ADM-05 Update Book
     Switch To Inventory Tab
     Click Edit Book    ${TEST_BOOK_TITLE}
     Switch To Management Tab
-    # Switch back to Management tab and fill in new data
-    Wait Until Element Is Visible    ${INPUT_BOOK_TITLE}    timeout=${MEDIUM_TIMEOUT}
-    Clear Element Text    ${INPUT_BOOK_TITLE}
-    Input Text            ${INPUT_BOOK_TITLE}    ${UPDATED_TITLE}
+    Fill Book Form    ${UPDATED_TITLE}    ${TEST_BOOK_AUTHOR}    ${TEST_BOOK_PRICE}    ${TEST_BOOK_STOCK}
     Submit Book Form
     Verify Admin Success Message    Book updated successfully.
 

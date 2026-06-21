@@ -1,6 +1,7 @@
 *** Settings ***
-Documentation    Global variables dùng chung cho toàn bộ test suite.
-...              Các biến này có thể bị override bởi --variable khi chạy CLI.
+Documentation    Global variables used across the entire test suite.
+...              These variables can be overridden by --variable when running CLI.
+Variables        ../environment.yaml
 
 
 *** Variables ***
@@ -17,13 +18,13 @@ ${LONG_TIMEOUT}             30s
 
 ${SCREENSHOT_DIR}           ${CURDIR}${/}..${/}..${/}results${/}screenshots
 
-${ADMIN_USERNAME}           admin
-${ADMIN_PASSWORD}           admin123
+${ADMIN_USERNAME}           ${credentials['admin']['username']}
+${ADMIN_PASSWORD}           ${credentials['admin']['password']}
 
-${TEST_USERNAME}            qa_testuser
-${TEST_PASSWORD}            Test@12345
-${TEST_FULL_NAME}           QA Test User
-${TEST_EMAIL}               qa_testuser@test.local
+${TEST_USERNAME}            ${credentials['test_user']['username']}
+${TEST_PASSWORD}            ${credentials['test_user']['password']}
+${TEST_FULL_NAME}           ${credentials['test_user']['full_name']}
+${TEST_EMAIL}               ${credentials['test_user']['email']}
 
 ${URL_HOME}                 ${BASE_URL}/
 ${URL_LOGIN}                ${BASE_URL}/login

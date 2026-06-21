@@ -1,10 +1,10 @@
 *** Settings ***
-Documentation    Page Object cho Navbar component.
+Documentation    Page Object for the Navbar component.
 ...
-...              TRÁCH NHIỆM:
-...              - Điều hướng qua các link trong Navbar
-...              - Xác nhận trạng thái Navbar (logged-in vs guest)
-...              - Thực hiện logout
+...              RESPONSIBILITIES:
+...              - Navigate via navbar links
+...              - Verify navbar state (logged-in vs guest)
+...              - Perform logout action
 
 Resource         ../locators/navbar_locators.resource
 Resource         ../variables/global_variables.resource
@@ -41,28 +41,33 @@ Click Logout Button
 
 
 Navbar Should Show Guest State
-    [Documentation]    Khi chưa login, navbar phải có Log in và Create account.
+    [Documentation]    When not logged in, navbar must show Log in and Create account.
     Wait Until Element Is Visible    ${NAV_LINK_LOGIN}       timeout=${SHORT_TIMEOUT}
     Wait Until Element Is Visible    ${NAV_LINK_REGISTER}    timeout=${SHORT_TIMEOUT}
     Element Should Not Be Visible    ${NAV_BTN_LOGOUT}
 
 Navbar Should Show Authenticated State
-    [Documentation]    Khi đã login, navbar phải có Profile và Logout.
+    [Documentation]    When logged in, navbar must show Profile and Logout.
     Wait Until Element Is Visible    ${NAV_LINK_PROFILE}    timeout=${MEDIUM_TIMEOUT}
     Wait Until Element Is Visible    ${NAV_BTN_LOGOUT}      timeout=${MEDIUM_TIMEOUT}
     Element Should Not Be Visible    ${NAV_LINK_LOGIN}
 
 Navbar Should Show Admin Link
-    [Documentation]    Chỉ admin mới thấy link Admin trong navbar.
+    [Documentation]    Only admin can see Admin link in navbar.
     Wait Until Element Is Visible    ${NAV_LINK_ADMIN}    timeout=${MEDIUM_TIMEOUT}
 
 Navbar Should Not Show Admin Link
-    [Documentation]    Customer không được thấy link Admin trong navbar.
+    [Documentation]    Customer must not see Admin link in navbar.
     Element Should Not Be Visible    ${NAV_LINK_ADMIN}
 
 
 Cart Badge Should Show
-    [Documentation]    Xác nhận badge cart hiển thị số lượng nhất định.
+    [Documentation]    Verify cart badge shows expected count.
     [Arguments]         ${expected_count}
     Wait Until Element Is Visible    ${NAV_CART_BADGE}    timeout=${SHORT_TIMEOUT}
     Element Should Contain           ${NAV_CART_BADGE}    ${expected_count}
+
+Navigate To Home Page
+    [Documentation]    Navigate to the home page via navbar logo.
+    Click Element    ${NAV_LOGO}
+    Wait Until Page Contains Element    //article    timeout=${MEDIUM_TIMEOUT}

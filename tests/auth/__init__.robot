@@ -1,10 +1,10 @@
 *** Settings ***
 Documentation    Authentication Test Suite — Tiny Bookstore
 ...
-...              Bao gồm các test case cho:
-...              - Đăng ký tài khoản (Register)
-...              - Đăng nhập (Login)
-...              - Đăng xuất (Logout)
+...              Includes test cases for:
+...              - Registering an account (Register)
+...              - Logging in (Login)
+...              - Logging out (Logout)
 ...              - Form validation
 ...
-...              Cần implement test case — framework đã sẵn sàng.
+...              Status: Test cases implemented — framework is ready.
