@@ -67,10 +67,14 @@ Select Category
     Wait Until Element Is Visible    ${BTN_CATEGORY_FILTER}    timeout=${MEDIUM_TIMEOUT}
     Click Element                    ${BTN_CATEGORY_FILTER}
     Sleep                            0.5s
-    ${category_option}    Set Variable
-    ...    xpath=//div[contains(@class, 'absolute')]//button[contains(., '${category_name}')]
-    Wait Until Element Is Visible    ${category_option}        timeout=${MEDIUM_TIMEOUT}
-    Click Element                    ${category_option}
+    ${options}=    Get WebElements    css=div.absolute.left-0.top-full button
+    FOR    ${option}    IN    @{options}
+        ${text}=    Get Text    ${option}
+        IF    '${text}' == '${category_name}'
+            Click Element    ${option}
+            BREAK
+        END
+    END
     Sleep                            1s
 
 Category Filter Should Be Active
