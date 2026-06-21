@@ -209,9 +209,7 @@ Test Cases:
 | TC-CHK-03 | Checkout Without Login |
 | TC-CHK-04 | Order Appears In Profile History After Checkout |
 
-=================
 **Total: ~50 Tests** (bao gồm các module Book Detail và Admin)
-=================
 
 ---
 
